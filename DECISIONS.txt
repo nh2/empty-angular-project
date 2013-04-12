@@ -1,0 +1,29 @@
+- Choice of dependencies:
+  - angular
+    - Is an FRP-style UI framework for whole-page JS applications.
+    - So that we don't have to update our UI automatically.
+    - Excellent testing capabilities.
+  - coffeescript
+    - Is an alternative syntax to Javascript (preprocessor).
+  - stylus
+    - Is an alternative syntax to CSS (preprocessor).
+  - testacular
+    - Is a console JS test runner that can connect to the browser.
+    - Recommended by angular.
+  - bower
+    - Is a JS/assets "package manager".
+    - So that we don't have to download JS libs and assets like bootstrap by hand or check them into the repo.
+  - grunt
+    - Is a JS task runner.
+    - Everybody uses it. Compiles, minifies, watches for file changes.
+- Notes
+  - You have that the needed programs (see package.json) are runanble in the $PATH.
+    `npm install` will install them into `node_modules`, but you still either have to put those into the $PATH or install them globally yourself.
+  - bower components/ are top-level so that both app/ and test/ can use them.
+  - A node-based development webserver is included.
+  - Read the "Top-level tasks" at the end of the Gruntfile.coffee.
+  - Most useful commands:
+    - grunt build
+    - grunt buildwatch (or just grunt)
+    - grunt server
+    - grunt test
