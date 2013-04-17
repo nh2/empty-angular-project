@@ -62,6 +62,8 @@ module.exports = (grunt) ->
     shell:
       server:
         command: "node scripts/web-server.js"
+      vogue:
+        command: "vogue --rewrite='static/:'"
       unittests:
         command: "./scripts/test.sh --single-run"
       e2etests:
@@ -101,6 +103,9 @@ module.exports = (grunt) ->
 
   # Development server
   grunt.registerTask "server", ["shell:server"]
+
+  # Stylesheet development live reloading server
+  grunt.registerTask "vogue", ["shell:vogue"]
 
   # Run unit and e2e test suites once.
   grunt.registerTask "test", ["shell:unittests", "shell:e2etests"]
