@@ -60,8 +60,12 @@ module.exports = (grunt) ->
     # Runs webserver and tests
     # - needs grunt-shell
     shell:
+      options: { stdout: true }
+
       server:
         command: "node scripts/web-server.js"
+      vogue:
+        command: "vogue --rewrite='static/:'"
       unittests:
         command: "./scripts/test.sh --single-run"
       e2etests:
@@ -80,6 +84,14 @@ module.exports = (grunt) ->
         files: ["<%= uglify.build.src %>"]
         tasks: "uglify"
 
+    # Running tasks in parallel, especially for running different watchers at the same time
+    # (such as coffee, stylus and vogue) with a single 'grunt dev' command.
+    # - needs grunt-parallel
+    parallel:
+      dev:
+        grunt: true
+        tasks: ['shell:vogue', 'watch']
+
     # Cleaning of generated files
     # - needs grunt-contrib-clean
     clean: ["build/"]
@@ -92,6 +104,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-stylus"
   grunt.loadNpmTasks "grunt-shell"
+  grunt.loadNpmTasks "grunt-parallel"
 
 
   # Top-level tasks
@@ -102,12 +115,21 @@ module.exports = (grunt) ->
   # Development server
   grunt.registerTask "server", ["shell:server"]
 
+  # Stylesheet development live reloading server
+  grunt.registerTask "vogue", ["shell:vogue"]
+
   # Run unit and e2e test suites once.
   grunt.registerTask "test", ["shell:unittests", "shell:e2etests"]
   # For auto-refresh unit testing, run ./scripts/test.sh.
 
-  # Build first, then keep watching.
+  # Build first, then keep watching files managed by grunt (only).
   grunt.registerTask "buildwatch", ["build", "watch"]
+
+  # The ultimate development target.
+  # Build first, then runs all fancy development watchers in parallel.
+  grunt.registerTask "dev", ["", "parallel:dev"]
+  # NOTE: With the current grunt-parallel 0.1.0, this hides the output
+  # of the called targets! Use 'grunt' and 'grunt vogue' manually until fixed.
 
   # Default task(s).
   grunt.registerTask "default", ["buildwatch"]

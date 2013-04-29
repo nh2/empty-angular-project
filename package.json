@@ -12,9 +12,11 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-watch": "~0.3.1",
+    "grunt-parallel": "~0.1.0",
     "grunt-shell": "~0.2.2",
     "stylus": "~0.32.1",
-    "testacular": "0.6.1"
+    "testacular": "0.6.1",
+    "vogue": "0.5.0"
   },
   "//": "testacular is fixed to 0.6.1 because 0.6.2 stops and says it is now karma, but that doesn't work with angular yet"
 }
