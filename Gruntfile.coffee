@@ -8,8 +8,17 @@ module.exports = (grunt) ->
     # Used in the other directives.
     src:
       coffee: ["app/**/*.coffee"]
+      plain: ["app/**/*.js"]
       stylus: ["app/**/*.styl"]
       coffee_test: ["test/**/*.coffee"]
+      lib: [
+        "components/jquery/jquery.js"
+        "components/underscore/underscore.js"
+        # jQuery must be before angular for selectors
+        "components/angular/angular.js"
+        "components/angular/angular-resource.js"
+        "components/bootstrap/docs/assets/js/bootstrap.js"
+      ]
 
 
     # Variables for storing names of generated files for convenience.
@@ -18,9 +27,28 @@ module.exports = (grunt) ->
       all_js: "build/all.js"
       all_js_min: "build/all.min.js"
 
+      plain_js: "build/plain.js"
+      plain_js_min: "build/plain.min.js"
+
+      lib_js: "build/lib.js"
+      lib_js_min: "build/lib.min.js"
+
+    # Concatenation of JS files
+    # - needs grunt-contrib-concat
+    concat:
+      plain:
+        src: "<%= src.plain %>"
+        dest: "<%= dest.plain_js %>"
+      lib:
+        src: "<%= src.lib %>"
+        dest: "<%= dest.lib_js %>"
+
     # Minimization
     # - needs grunt-contrib-uglify
     uglify:
+      lib:
+        src: "<%= dest.lib_js %>"
+        dest: "<%= dest.lib_js_min %>"
       build:
         src: "<%= dest.all_js %>"
         dest: "<%= dest.all_js_min %>"
@@ -51,6 +79,7 @@ module.exports = (grunt) ->
         options:
           # dirs to scan for @import directives
           paths: []
+          'include css': true
 
         expand: true
         src: ["<%= src.stylus %>"]
@@ -74,15 +103,27 @@ module.exports = (grunt) ->
     # Automatic rebuilding on file change
     # - needs grunt-contrib-watch
     watch:
+      concat:
+        files: ["<%= src.lib %>", "<%= src.plain %>"]
+        tasks: "concat"
       coffee:
         files: ["<%= src.coffee %>", "<%= src.coffee_test %>"]
         tasks: "coffee"
       stylus:
         files: ["<%= src.stylus %>"]
         tasks: "stylus"
-      uglify:
-        files: ["<%= uglify.build.src %>"]
-        tasks: "uglify"
+      # We don't currently need JS minification.
+      # uglify:
+      #   files: ["<%= uglify.build.src %>", "<%= uglify.lib.src %>"]
+      #   tasks: "uglify"
+
+    # Running tasks in parallel, especially for running different watchers at the same time
+    # (such as coffee, stylus and vogue) with a single 'grunt dev' command.
+    # - needs grunt-parallel
+    parallel:
+      dev:
+        grunt: true
+        tasks: ['shell:vogue', 'watch']
 
     # Running tasks in parallel, especially for running different watchers at the same time
     # (such as coffee, stylus and vogue) with a single 'grunt dev' command.
@@ -100,6 +141,7 @@ module.exports = (grunt) ->
   # Load plugins.
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-clean"
+  grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-uglify"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-stylus"
@@ -110,7 +152,7 @@ module.exports = (grunt) ->
   # Top-level tasks
 
   # Build
-  grunt.registerTask "build", ["coffee", "stylus", "uglify"]
+  grunt.registerTask "build", ["concat", "coffee", "stylus"] # "uglify"
 
   # Development server
   grunt.registerTask "server", ["shell:server"]

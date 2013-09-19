@@ -1,0 +1,34 @@
+// Vendor prefixes.
+// Unprefixed versions should come last.
+
+
+// Flex boxes
+
+// Syntax needs FF >= 22
+// or FF >= 18 + layout.css.flexbox.enabled
+
+flex()
+  -webkit-flex: arguments
+  flex: arguments
+
+flexContainer(direction = row)
+  display: -webkit-flex
+  display: flex
+  -webkit-flex-direction: direction
+  flex-direction: direction
+
+
+// Box sizing
+
+box-sizing()
+  -moz-box-sizing: arguments
+  box-sizing: arguments
+
+
+// Transitions
+
+transition()
+  -webkit-transition: arguments
+  -moz-transition: arguments
+  -o-transition: arguments
+  transition: arguments

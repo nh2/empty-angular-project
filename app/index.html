@@ -1,37 +1,31 @@
 <!doctype html>
 <html lang="en" ng-app="project">
-<head>
-  <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
 
-  <title>PROJECT</title>
+    <title>PROJECT</title>
 
-  <!-- Library CSS -->
-  <link rel="stylesheet" href="../components/bootstrap/docs/assets/css/bootstrap.css">
+    <!-- Library CSS -->
+    <link rel="stylesheet" href="../components/bootstrap/docs/assets/css/bootstrap.css" media="screen">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../build/app/css/app.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../build/app/css/app.css">
 
-  <!-- Library scripts -->
-  <script src="../components/jquery/jquery.js"></script>
-  <!-- jQuery before angular for selectors -->
-  <script src="../components/angular/angular.js"></script>
-  <script src="../components/angular-resource/angular-resource.js"></script>
-  <script src="../components/coffee-script/extras/coffee-script.js"></script>
+    <!-- Library scripts -->
+    <script src="../build/lib.js"></script>
 
-  <!-- Scripts -->
-  <script src="../build/app/js/app.js"></script>
-  <script src="../build/app/js/controllers.js"></script>
-  <script src="../build/app/js/filters.js"></script>
-  <script src="../build/app/js/services.js"></script>
-  <script src="../build/app/js/directives.js"></script>
+    <!-- Scripts -->
+    <script src="../build/all.js"></script>
+    <script src="../build/plain.js"></script>
 
-  <!-- Development-only scripts -->
-  <div inject-vogue only-localhost="true"></div>
+  </head>
+  <body>
 
-</head>
-<body>
+    <!-- Development-only scripts -->
+    <div inject-vogue only-localhost="true"></div>
 
-  <div ng-view></div>
+    <!-- Our app view -->
+    <div id="content" ng-view></div>
 
-</body>
+  </body>
 </html>

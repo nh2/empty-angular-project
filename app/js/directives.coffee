@@ -1,6 +1,8 @@
 # Directives
 
+
 app = angular.module("project")
+
 
 # Loads the script given in the 'src' property if the browser is on 'localhost'.
 #
@@ -42,3 +44,35 @@ app.directive "injectVogue",  [->
     script.src = src
     document.body.appendChild script
 ]
+
+
+
+# Updates a variable when the window scrollTop position is changed.
+# Usage:
+#   <set-window-scroll set-variable="windowScroll"></set-window-scroll>
+app.directive "setWindowScroll", ->
+  restrict: "E"
+  scope:
+    setVariable: "="
+
+  link: (scope) ->
+    # Throttle to 300ms so that we don't call $apply so often.
+    throttled = _.throttle ->
+      # Need to call $apply here since we are changing the scope *asynchronously* (in scroll callback).
+      # See http://www.bennadel.com/blog/2449-Directive-Link-observe-And-watch-Functions-Execute-Inside-An-AngularJS-Context.htm
+      scope.$apply ->
+        scope.setVariable = $(window).scrollTop()
+    , 300
+    $(window).scroll throttled
+
+
+# Changes the width of an <input type="text"> element automatically to fit its contents.
+#
+# Sets the width to (#numberOfChars + 1) ex.
+app.directive "autosize", ->
+  restrict: "A"
+
+  link: (scope, elem, attrs) ->
+    scope.$watch attrs.ngModel, (newVal, oldVal) ->
+      size = newVal.length or 0
+      elem.css width: "#{size+1}ex"
